@@ -14,24 +14,28 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
       padding: 20px;
+      box-sizing: border-box;
     }
     .card {
       background: rgba(0, 0, 0, 0.6);
       border-radius: 20px;
-      padding: 40px;
+      padding: 20px;
+      width: 90%;
       max-width: 600px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      margin: 20px auto;
     }
     h1 {
-      font-size: 2.5em;
+      font-size: clamp(1.8em, 5vw, 2.5em);
       margin-bottom: 20px;
     }
     p {
-      font-size: 1.2em;
+      font-size: clamp(1em, 4vw, 1.2em);
       line-height: 1.6;
+      margin: 15px 0;
     }
     .heart {
       font-size: 2em;
@@ -41,23 +45,52 @@
     }
     .timer {
       margin-top: 30px;
-      font-size: 1.5em;
+      font-size: clamp(1.2em, 4vw, 1.5em);
       font-weight: bold;
+    }
+    .music-control {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+      border: 2px solid #fff;
+    }
+    .music-control:hover {
+      background: rgba(0, 0, 0, 0.8);
     }
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.2); }
     }
+    @media (max-width: 480px) {
+      .card {
+        padding: 15px;
+      }
+      .music-control {
+        bottom: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+      }
+    }
   </style>
 </head>
 <body>
-  <audio autoplay loop>
-    <source src="https://drive.google.com/file/d/1Uha8uJUmSSJQaIbb7LXhC9KtEL9zwikt/view?usp=sharing" type="audio/mpeg">
+  <audio id="background-music" loop>
+    <source src="https://www.dropbox.com/scl/fi/0lh2kyikffpjhmt0uvjvx/James-Arthur-Recovery.mp3?rlkey=6s1syl9ahkgsm8s6xkfqei7ea&raw=1" type="audio/mpeg">
     Ваш браузер не поддерживает аудио.
   </audio>
 
   <div class="card">
-    <h1>Любимая ❤️</h1>
+    <h1>Настюша ❤️</h1>
     <p>В эту субботу я приглашаю тебя на особенный вечер, который запомнится нам навсегда.</p>
     <p>В 17:30 я заеду за тобой — прошу быть готовой к маленькому приключению 🌟</p>
     <p>Немного позже нас ждёт ужин в особенном месте и прогулка, которая подарит незабываемые эмоции.</p>
@@ -66,9 +99,29 @@
     <div class="heart">💖</div>
   </div>
 
+  <div class="music-control" id="music-control" onclick="toggleMusic()">
+    🎵
+  </div>
+
   <script>
     const countdownEl = document.getElementById('countdown');
     const targetDate = new Date("2025-05-31T17:30:00").getTime();
+    const music = document.getElementById('background-music');
+    const musicControl = document.getElementById('music-control');
+    let isMusicPlaying = false;
+
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        music.pause();
+        musicControl.textContent = '🎵';
+      } else {
+        music.play().catch(error => {
+          console.log("Audio playback failed:", error);
+        });
+        musicControl.textContent = '⏸️';
+      }
+      isMusicPlaying = !isMusicPlaying;
+    }
 
     function updateCountdown() {
       const now = new Date().getTime();
@@ -89,6 +142,18 @@
 
     const interval = setInterval(updateCountdown, 1000);
     updateCountdown();
+
+    // Try to play music when user interacts with the page
+    document.addEventListener('click', function() {
+      if (!isMusicPlaying) {
+        music.play().then(() => {
+          isMusicPlaying = true;
+          musicControl.textContent = '⏸️';
+        }).catch(error => {
+          console.log("Audio playback failed:", error);
+        });
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
