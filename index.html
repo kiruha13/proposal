@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вечер Сюрприз</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(to right, #fbd3e9, #bb377d);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.2em;
+      line-height: 1.6;
+    }
+    .heart {
+      font-size: 2em;
+      color: #ff69b4;
+      margin-top: 20px;
+      animation: pulse 1.5s infinite;
+    }
+    .timer {
+      margin-top: 30px;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+  <audio autoplay loop>
+    <source src="https://www.dropbox.com/scl/fi/0lh2kyikffpjhmt0uvjvx/James-Arthur-Recovery.mp3?rlkey=6s1syl9ahkgsm8s6xkfqei7ea&raw=1" type="audio/mpeg">
+    Ваш браузер не поддерживает аудио.
+  </audio>
+
+  <div class="card">
+    <h1>Настюша ❤️</h1>
+    <p>В эту субботу я приглашаю тебя на особенный вечер, который запомнится нам навсегда.</p>
+    <p>В 17:30 я заеду за тобой — прошу быть готовой к маленькому приключению 🌟</p>
+    <p>Немного позже нас ждёт ужин в особенном месте и прогулка, которая подарит незабываемые эмоции.</p>
+    <p>Платье — по настроению, но будь готова блистать 🌹</p>
+    <div class="timer" id="countdown"></div>
+    <div class="heart">💖</div>
+  </div>
+
+  <script>
+    const countdownEl = document.getElementById('countdown');
+    const targetDate = new Date("2025-05-31T17:30:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance <= 0) {
+        countdownEl.innerHTML = "🌟 Пора выходить! 🌟";
+        clearInterval(interval);
+        return;
+      }
+
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownEl.innerHTML = `Осталось: ${hours}ч ${minutes}м ${seconds}с`;
+    }
+
+    const interval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
